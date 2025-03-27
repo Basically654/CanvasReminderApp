@@ -1,8 +1,8 @@
 import requests
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
+
 # Your Canvas API URL (replace with your Canvas domain)
 CANVAS_BASE_URL = "https://bsu.instructure.com/api/v1"
 # Replace with your API token
@@ -12,7 +12,6 @@ API_TOKEN = os.getenv("API_KEY")
 headers = {
     "Authorization": f"Bearer {API_TOKEN}"
 }
-
 
 # Function to fetch only current courses (active enrollments)
 class CourseEnrollment:
@@ -41,7 +40,7 @@ class CourseEnrollment:
             print(f"Error occurred: {err}")
         return []
 
-    def getURL(self, endpoint, **params):
+    def get_URL(self, endpoint, **params):
         """
         Constructs the URL for the Canvas API endpoint.
 
@@ -56,12 +55,12 @@ class CourseEnrollment:
         if params:
             query_string = "&".join([f"{key}={value}" for key, value in params.items()])
             full_url += f"?{query_string}"
-
+        print(full_url)
         return full_url
 
     def fetch_assignments(self, course_id):
         # Use getURL to build the URL
-        url = self.getURL(f"/courses/{course_id}/assignments")
+        url = self.get_URL(f"/courses/{course_id}/assignments")
         print(f"Fetching assignments from URL: {url}")
         try:
             response = requests.get(url, headers=self.headers)
@@ -83,10 +82,9 @@ class CourseEnrollment:
             print(f"Error occurred: {err}")
         return []
 
-
 if __name__ == '__main__':
     # Create an instance of the CourseEnrollment class
     course_enrollment = CourseEnrollment(CANVAS_BASE_URL, API_TOKEN)
-
     # Call the fetch_current_courses method on the instance
     print(course_enrollment.fetch_current_courses())
+    print(course_enrollment.fetch_assignments(167749))
