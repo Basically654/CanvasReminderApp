@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #e7f3ff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .course-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .view-assignments-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .view-assignments-btn:hover {
+            background-color: #0056b3;
+        }
+        .no-courses {
+            text-align: center;
+            color: #777;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Your Courses</h1>
+
+        {% if courses %}
+        <ul>
+            {% for course in courses %}
+            <li>
+                <span class="course-title">{{ course['name'] }}</span>
+                <a href="/course/{{ course['id'] }}/assignments">
+                    <button class="view-assignments-btn">View Assignments</button>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="no-courses">No active courses found. Please check back later.</p>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
