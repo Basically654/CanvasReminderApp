@@ -2,6 +2,8 @@
 
 A web application built with Flask that connects to the Canvas API to fetch student course data, assignments, and due dates. The app allows students to view their active courses and assignments and provides reminders for upcoming deadlines.
 
+## README Genereated by ChatGPT
+
 ## Features
 
 - **Course Dashboard**: Displays a list of active courses the user is enrolled in.
