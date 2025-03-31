@@ -50,7 +50,7 @@ def course_assignments(course_id):
 @app.route('/add_reminder', methods=['POST'])
 def add_new_reminder():
     # Assuming you get the data from the form
-    course_name = request.form.get('course_id')
+    course_name = request.form.get('course_name')
     assignment_name = request.form.get('assignment_name')
     due_date_str = request.form['due_date']
     reminder_time = int(request.form['reminder_time'])

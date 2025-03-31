@@ -20,7 +20,7 @@
                     // Populate the assignments drop-down
                     assignments.forEach(assignment => {
                         let option = document.createElement('option');
-                        option.value = assignment.id;
+                        option.value = assignment.name;
                         option.text = assignment.name;
                         assignmentSelect.appendChild(option);
                     });
@@ -172,7 +172,7 @@
         <form action="/add_reminder" method="POST">
             <!-- Course Drop-Down Menu -->
             <label for="course_id">Select Course:</label>
-            <select id="course_id" name="course_id" class="dropdown" required onchange="loadAssignments(this.value)">
+            <select id="course_id" name="course_name" class="dropdown" required onchange="loadAssignments(this.value)">
                 <option value="">Select a course</option>
                 {% for course in courses %}
                     <option value="{{ course.id }}">{{ course.name }}</option>
