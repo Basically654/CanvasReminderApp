@@ -37,12 +37,12 @@ def home():
         assignments = []
     return render_template('home.html', courses=courses, assignments=assignments)
 
-
 # Route to fetch assignments for a specific course
 @app.route('/course/<int:course_id>/assignments')
 def course_assignments(course_id):
     assignments = course_enrollment.fetch_assignments(course_id)
-    assignment_list = [{'id':assignment['id'], 'name': assignment["name"]} for assignment in assignments]
+    print(assignments)
+    assignment_list = [{'name': assignment['name']} for assignment in assignments]
     return jsonify(assignment_list)
 
 
@@ -50,16 +50,17 @@ def course_assignments(course_id):
 @app.route('/add_reminder', methods=['POST'])
 def add_new_reminder():
     # Assuming you get the data from the form
-    course_id = request.form['course_id']
-    assignment_id = request.form['assignment_id']
+    course_name = request.form.get('course_id')
+    assignment_name = request.form.get('assignment_name')
     due_date_str = request.form['due_date']
-    reminder_time = int(request.form['reminder_time'])  # e.g., 24 hours before due date
+    reminder_time = int(request.form['reminder_time'])
 
     # Parse the due date from the form input (assuming it's in 'YYYY-MM-DD' format)
-    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
+    due_date = datetime.strptime(due_date_str, '%B %d, %Y')
+
 
     # Add the reminder
-    add_reminder(course_id, assignment_id, due_date, reminder_time)
+    add_reminder(course_name, assignment_name, due_date, reminder_time)
 
     return render_template('home.html', courses=course_enrollment.fetch_current_courses(), reminders=reminders)
 
@@ -68,7 +69,6 @@ def add_new_reminder():
 @app.route('/reminders')
 def view_reminders():
     return render_template('reminders.html', reminders=reminders)
-
 
 # Periodic task to check and send reminders
 def scheduled_task():
@@ -85,13 +85,13 @@ if __name__ == "__main__":
 @app.route('/assignments')
 def fetch_assignments():
     # Example course and assignment data from Canvas API
-    course_id = course_enrollment.fetch_current_courses()[0]['id']
-    assignment_id = course_enrollment.fetch_assignments(course_id)[0]['title']
+    course_name = course_enrollment.fetch_current_courses()[0]['name']
+    assignment_name = course_enrollment.fetch_assignments(course_name)[0]['name']
     due_date = datetime(2025, 4, 1, 12, 0)  # Due date for assignment
     reminder_time = 24  # Reminder 24 hours before due date
-    assignments = course_enrollment.fetch_assignments(course_id)
+    assignments = course_enrollment.fetch_assignments(course_name)
     # Add the reminder
-    add_reminder(course_id, assignment_id, due_date, reminder_time)
+    add_reminder(course_name, assignment_name, due_date, reminder_time)
 
     return render_template('assignments.html', assignments=assignments)
 

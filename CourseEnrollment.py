@@ -55,7 +55,6 @@ class CourseEnrollment:
         if params:
             query_string = "&".join([f"{key}={value}" for key, value in params.items()])
             full_url += f"?{query_string}"
-        print(full_url)
         return full_url
 
     def fetch_assignments(self, course_id):
@@ -86,5 +85,3 @@ if __name__ == '__main__':
     # Create an instance of the CourseEnrollment class
     course_enrollment = CourseEnrollment(CANVAS_BASE_URL, API_TOKEN)
     # Call the fetch_current_courses method on the instance
-    print(course_enrollment.fetch_current_courses())
-    print(course_enrollment.fetch_assignments(167749))

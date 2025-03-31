@@ -172,22 +172,22 @@
         <form action="/add_reminder" method="POST">
             <!-- Course Drop-Down Menu -->
             <label for="course_id">Select Course:</label>
-        <select id="course_id" name="course_id" class="dropdown" required onchange="loadAssignments(this.value)">
-            <option value="">Select a course</option>
-            {% for course in courses %}
-                <option value="{{ course.id }}">{{ course.name }}</option>
-            {% endfor %}
-        </select>
+            <select id="course_id" name="course_id" class="dropdown" required onchange="loadAssignments(this.value)">
+                <option value="">Select a course</option>
+                {% for course in courses %}
+                    <option value="{{ course.id }}">{{ course.name }}</option>
+                {% endfor %}
+            </select>
 
             <!-- Assignment Drop-Down Menu -->
             <label for="assignment_id">Select Assignment:</label>
-        <select id="assignment_id" name="assignment_id" class="dropdown" required>
+        <select id="assignment_id" name="assignment_name" class="dropdown" required>
             <option value="">Select an assignment</option>
             <!-- This will be populated dynamically based on course selection -->
         </select>
 
             <label for="due_date">Due Date (e.g., March 29, 2025):</label>
-            <input type="text" id="due_date" name="due_date" placeholder="March 29, 2025" required>
+            <input type="text" id="due_date" name="due_date" placeholder="'March 29, 2025'" required>
 
             <label for="reminder_time">Reminder Time (in hours):</label>
             <input type="number" id="reminder_time" name="reminder_time" required>
@@ -214,7 +214,7 @@
         <ul>
             {% for reminder in reminders %}
                 <li>
-                    Course: {{ reminder.course_id }} | Assignment: {{ reminder.assignment_id }} | Due: {{ reminder.due_date }} | Reminder: {{ reminder.reminder_time }} hours before
+                    Course: {{ reminder.course_name }} | Assignment: {{ reminder.assignment_name }} | Due: {{ reminder.due_date }} | Reminder: {{ reminder.reminder_time }} hours before
                 </li>
             {% endfor %}
         </ul>
