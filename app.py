@@ -43,6 +43,7 @@ def course_assignments(course_id):
     assignments = course_enrollment.fetch_assignments(course_id)
     print(assignments)
     assignment_list = [{'name': assignment['name']} for assignment in assignments]
+
     return jsonify(assignment_list)
 
 
@@ -56,7 +57,7 @@ def add_new_reminder():
     reminder_time = int(request.form['reminder_time'])
 
     # Parse the due date from the form input (assuming it's in 'YYYY-MM-DD' format)
-    due_date = datetime.strptime(due_date_str, '%B %d, %Y')
+    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
 
 
     # Add the reminder

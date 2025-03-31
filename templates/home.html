@@ -84,6 +84,30 @@
             margin-bottom: 5px;
         }
 
+        .dropdown, .date-input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #007BFF;
+            font-size: 16px;
+        }
+
+        .date-container{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+        }
+
+        .reminder-container{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 200px;
+        }
+
         input[type="text"], input[type="number"], input[type="date"] {
             width: 100%;
             padding: 10px;
@@ -136,6 +160,21 @@
             align-items: center;
         }
 
+        .see-all-reminders {
+            display: block;
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            max-width: 100px;
+            max-height: 50px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
         .course-item a {
             text-decoration: none;
             color: #007bff;
@@ -185,13 +224,14 @@
             <option value="">Select an assignment</option>
             <!-- This will be populated dynamically based on course selection -->
         </select>
-
-            <label for="due_date">Due Date (e.g., March 29, 2025):</label>
-            <input type="text" id="due_date" name="due_date" placeholder="'March 29, 2025'" required>
-
-            <label for="reminder_time">Reminder Time (in hours):</label>
-            <input type="number" id="reminder_time" name="reminder_time" required>
-
+            <div class="date-container"?>
+                <label for="due_date">Due Date (e.g., March 29, 2025):</label>
+                <input type="date" id="due_date" name="due_date" class="date-input" required>
+            </div>
+            <div class = "reminder-container">
+                <label for="reminder_time">Reminder Time (in hours):</label>
+                <input type="number" id="reminder_time" name="reminder_time" required>
+            </div>
             <button type="submit">Add Reminder</button>
         </form>
     </section>
@@ -208,9 +248,9 @@
         </ul>
     </section>
 
-
     <section class="reminder-list">
         <h2>Upcoming Reminders</h2>
+        <a href="{{url_for('view_reminders')}}" class ="see-all-reminders">See All Reminders</a>
         <ul>
             {% for reminder in reminders %}
                 <li>

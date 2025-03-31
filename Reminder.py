@@ -19,7 +19,7 @@ class Reminder:
 
     def send_reminder(self):
         print(f"Reminder for Assignment {self.assignment_name} in Course {self.course_name}: "
-              f"Due on {self.due_date.strftime('%Y-%m-%d %H:%M:%S')}")
+              f"Due on {self.due_date.strftime('%B %d, %Y %H:%M:%S')}")
 
     def add_reminder(self, reminders_list):
         reminders_list.append(self)
