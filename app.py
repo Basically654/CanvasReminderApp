@@ -7,7 +7,7 @@ from Reminder import add_reminder,reminders
 from CourseEnrollment import CourseEnrollment
 
 app = Flask(__name__, template_folder='templates')
-app.secret_key = "TEST_KEY"
+app.secret_key = os.urandom(24)
 load_dotenv()
 
 # Instantiate CourseEnrollment class with the Canvas API details
