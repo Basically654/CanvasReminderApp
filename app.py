@@ -1,21 +1,21 @@
 import os
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, session, flash, url_for, redirect
 from dotenv import load_dotenv
 from datetime import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
-from Reminder import add_reminder, check_and_send_reminders, reminders  # Import reminder functions
-from CourseEnrollment import CourseEnrollment  # Assuming this is already implemented
+from Reminder import add_reminder,reminders
+from CourseEnrollment import CourseEnrollment
 
 app = Flask(__name__, template_folder='templates')
+app.secret_key = "TEST_KEY"
 load_dotenv()
 
 # Instantiate CourseEnrollment class with the Canvas API details
 CANVAS_BASE_URL = "https://bsu.instructure.com/api/v1"
 API_TOKEN = os.getenv("API_KEY")
+EMAIL = os.getenv("EMAIL")
+PASSWORD = os.getenv("PASSWORD")
 course_enrollment = CourseEnrollment(CANVAS_BASE_URL, API_TOKEN)
-
-
 
 # Function to fetch current courses
 @app.route('/courses')
@@ -24,11 +24,31 @@ def courses():
     courses = course_enrollment.fetch_current_courses()
     return render_template('courses.html', courses=courses)
 
+#Login for authenticated user
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    print(request.method)
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        if email == EMAIL and password == PASSWORD:
+            session['user'] = email
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid email or password', 'error')
+    return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('login'))
 # Home route to fetch courses and reminders
-@app.route('/')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
     # Fetch current courses and reminders
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
     courses = course_enrollment.fetch_current_courses()
     if courses:
         first_course_id = courses[0].get('id')
@@ -43,8 +63,7 @@ def course_assignments(course_id):
     assignments = course_enrollment.fetch_assignments(course_id)
     print(assignments)
     assignment_list = [{'name': assignment['name']} for assignment in assignments]
-
-    return jsonify(assignment_list)
+    return render_template('assignments.html', assignments=assignment_list)
 
 
 # Route to add a new reminder (e.g., for a specific assignment)
@@ -71,18 +90,6 @@ def add_new_reminder():
 def view_reminders():
     return render_template('reminders.html', reminders=reminders)
 
-# Periodic task to check and send reminders
-def scheduled_task():
-    check_and_send_reminders()
-
-# Initialize the scheduler and start it
-scheduler = BackgroundScheduler()
-scheduler.add_job(scheduled_task, 'interval', minutes=1)  # Check every minute
-scheduler.start()
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
 @app.route('/assignments')
 def fetch_assignments():
     # Example course and assignment data from Canvas API
@@ -95,11 +102,6 @@ def fetch_assignments():
     add_reminder(course_name, assignment_name, due_date, reminder_time)
 
     return render_template('assignments.html', assignments=assignments)
-
-@app.route('/reminders', methods=['GET'])
-def view_reminders():
-    # Show reminders to the user (you can customize this template)
-    return render_template('reminders.html', reminders=reminders)
 
 if __name__ == "__main__":
     app.run(debug=True)
